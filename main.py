@@ -61,6 +61,11 @@ def getAlerts(pincode):
 def hello():
     return 'Hello, World!'
 
+
+@app.route('/mobile/users', methods = ['GET'])
+def fetchfetchAllUsersInfo():
+    return jsonify(MobileService.fetchAllUsersInfo())
+
 def toAscii(str):
     return str.encode('ascii','ignore').strip('"')
 

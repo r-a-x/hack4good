@@ -29,7 +29,7 @@ class MobileService:
         pass
 
     @staticmethod
-    def fetchfetchAllUsersInfo():
+    def fetchAllUsersInfo():
         userList = g.mongo.user.find({})
         users = []
         for user in userList:
