@@ -1,12 +1,12 @@
 from bson.json_util import dumps
-
+from collections import defaultdict
 class UtilService:
     def __init__(self):
         pass
 
     @staticmethod
     def pinCodeParser(path):
-        location = {}
+        location = defaultdict(lambda :0)
         f = open(path)
         for line in f:
             words = line.split()

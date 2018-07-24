@@ -14,10 +14,7 @@ class MobileService:
     @staticmethod
     def fetchAllUsersInfo():
         userList = g.mongo.user.find({})
-        users = []
-        for user in userList:
-            users.append(UtilService.documentToJson(user))
-        return users
+        return UtilService.convertDocumentsToJson(userList)
 
     @staticmethod
     def login(email, password):
@@ -37,8 +34,8 @@ class MobileService:
 
     @staticmethod
     def getQuestions():
-        questions = g.mongo.questions.find_one()
-        return UtilService.documentToJson(questions)
+        questions = g.mongo.questions.find()
+        return UtilService.convertDocumentsToJson(questions)
 
     @staticmethod
     def postQuestions(questions):
@@ -51,7 +48,7 @@ class MobileService:
         return inserted_questions
 
     @staticmethod
-    def storeDoctorsVerdict(id, testResult,verdict):
+    def storeDoctorsVerdict(id, testResult,disease):
         user = g.mongo.user.find_one({"_id":ObjectId(id)})
-        g.mongo.user.update({"_id":ObjectId(id)}, {"$set":{"label":verdict, "testResult":testResult}})
+        g.mongo.user.update({"_id":ObjectId(id)}, {"$set":{"disease":disease, "testResult":testResult}})
         return UtilService.documentToJson(user)
