@@ -21,7 +21,10 @@ def documentToJson(document):
     document = eval(dumps(document))
     mp = {}
     for key, value in document.iteritems():
-        mp[ trimStr(key) ] = parseList( value )
+        if "_id" in key:
+            mp["id"] = str(value["$oid"])
+        else:
+            mp[ trimStr(key) ] = parseList( value )
     return mp
 
 class MobileService:
@@ -66,3 +69,10 @@ class MobileService:
             question["id"] = str(question_id.inserted_id)
             inserted_questions.append(question)
         return inserted_questions
+
+    @staticmethod
+    def storeDoctorsVerdict(id,firstName, lastName):
+        user = g.mongo.user.find({"firstName":firstName, "lastName":lastName})
+        #adding additional field in the existing table
+        g.mongo.user.update({"firstName":firstName}, {"lastName":lastName},{"$set":{"label":verdict}})
+        return 1
