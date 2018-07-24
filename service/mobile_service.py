@@ -6,7 +6,6 @@ class MobileService:
     def __init__(self):
         pass
 
-
     @staticmethod
     def getUsers(id):
         return UtilService.documentToJson(g.mongo.user.find_one(({"_id":ObjectId(id)})))
@@ -24,9 +23,9 @@ class MobileService:
     def login(email, password):
         user = g.mongo.user.find({"email":email,"password":password})
         # user["id"]  = user._id.inserted_id
-        if user is None:
+        if user.count() == 0:
             return {}
-        return user
+        return UtilService.documentToJson(g.mongo.user.find_one({"email":email,"password":password}))
 
     @staticmethod
     def registerUser(firstName, lastName, age, sex, pincode, college, email, password):
