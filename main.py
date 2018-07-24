@@ -31,6 +31,7 @@ def unwind_json():
 @app.before_request
 def init_mongo():
     g.mongo = mongo
+    g.pincode = pincode
 
 
 def initPinCode():

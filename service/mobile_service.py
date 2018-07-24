@@ -1,32 +1,6 @@
 from flask import g
-from bson.json_util import dumps
 from bson.objectid import ObjectId
-
-def listHelper(str):
-    s = []
-    str = str.split(',')
-    for e in str:
-        s.append(e.replace("[","").replace("]",""))
-    return s
-
-def parseList(str):
-    if ',' in str:
-        return listHelper(str)
-    return str
-
-def trimStr(str):
-    return str.replace('"','')
-
-
-def documentToJson(document):
-    document = eval(dumps(document))
-    mp = {}
-    for key, value in document.iteritems():
-        if "_id" in key:
-            mp["id"] = str(value["$oid"])
-        else:
-            mp[ trimStr(key) ] = parseList( value )
-    return mp
+from util.util_service import UtilService
 
 class MobileService:
     def __init__(self):
@@ -35,7 +9,7 @@ class MobileService:
 
     @staticmethod
     def getUsers(id):
-        return documentToJson(g.mongo.user.find_one(({"_id":ObjectId(id)})))
+        return UtilService.documentToJson(g.mongo.user.find_one(({"_id":ObjectId(id)})))
 
 
     @staticmethod
@@ -43,7 +17,7 @@ class MobileService:
         userList = g.mongo.user.find({})
         users = []
         for user in userList:
-            users.append(documentToJson(user))
+            users.append(UtilService.documentToJson(user))
         return users
 
     @staticmethod
@@ -65,7 +39,7 @@ class MobileService:
     @staticmethod
     def getQuestions():
         questions = g.mongo.questions.find_one()
-        return documentToJson(questions)
+        return UtilService.documentToJson(questions)
 
     @staticmethod
     def postQuestions(questions):
@@ -81,4 +55,4 @@ class MobileService:
     def storeDoctorsVerdict(id, testResult,verdict):
         user = g.mongo.user.find_one({"_id":ObjectId(id)})
         g.mongo.user.update({"_id":ObjectId(id)}, {"$set":{"label":verdict, "testResult":testResult}})
-        return documentToJson(user)
+        return UtilService.documentToJson(user)
