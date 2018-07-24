@@ -76,7 +76,7 @@ def hello():
     return 'Hello, World!'
 
 
-@app.route('/web/users', methods=['GET'])
+@app.route('/users', methods=['GET'])
 def fetchfetchAllUsersInfo():
     return jsonify(MobileService.fetchAllUsersInfo())
 
@@ -86,6 +86,9 @@ def postDisease():
     return jsonify(MobileService.storeDoctorsVerdict(required_param("id"), required_param("testResult"),
                                                      required_param("verdict")))
 
+@app.route('/users/<id>', methods=['GET'])
+def getUsers(id):
+    return jsonify(MobileService.getUsers(id))
 
 if __name__ == "__main__":
     initPinCode()

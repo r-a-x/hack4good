@@ -32,6 +32,12 @@ class MobileService:
     def __init__(self):
         pass
 
+
+    @staticmethod
+    def getUsers(id):
+        return documentToJson(g.mongo.user.find_one(({"_id":ObjectId(id)})))
+
+
     @staticmethod
     def fetchAllUsersInfo():
         userList = g.mongo.user.find({})
