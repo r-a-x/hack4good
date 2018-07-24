@@ -1,5 +1,6 @@
 from flask import g
 from bson.json_util import dumps
+from bson.objectid import ObjectId
 
 def listHelper(str):
     s = []
@@ -71,8 +72,7 @@ class MobileService:
         return inserted_questions
 
     @staticmethod
-    def storeDoctorsVerdict(id,firstName, lastName):
-        user = g.mongo.user.find({"firstName":firstName, "lastName":lastName})
-        #adding additional field in the existing table
-        g.mongo.user.update({"firstName":firstName}, {"lastName":lastName},{"$set":{"label":verdict}})
-        return 1
+    def storeDoctorsVerdict(id, testResult,verdict):
+        user = g.mongo.user.find_one({"_id":ObjectId(id)})
+        g.mongo.user.update({"_id":ObjectId(id)}, {"$set":{"label":verdict, "testResult":testResult}})
+        return documentToJson(user)

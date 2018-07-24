@@ -12,6 +12,6 @@ class StatsService:
     def getPrecaution(disease):
         pass
 
-    @statismethod
+    @staticmethod
     def getAlerts(pincode):
         pass
