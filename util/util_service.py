@@ -41,3 +41,10 @@ class UtilService:
             else:
                 mp[ UtilService.trimStr(key) ] = UtilService.parseList( value )
         return mp
+
+    @staticmethod
+    def convertDocumentsToJson(documents):
+        result = []
+        for document in documents:
+            result.append(UtilService.documentToJson(document))
+        return result
