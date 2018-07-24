@@ -1,14 +1,12 @@
 from flask import Flask, g, request
 from flask.json import jsonify
 from pymongo import MongoClient
-from flask_pymongo import PyMongo
 
 app = Flask(__name__)
 
 from service.mobile_service import MobileService
 from util.util_service import UtilService
 
-app.config["MONGO_URI"] = "mongodb://localhost:27017/rabans"
 mongo = MongoClient("localhost", 27017).rabans
 PinCodePath = "./resources/IN.txt"
 pincode = {}
@@ -31,14 +29,6 @@ def unwind_json():
 def init_mongo():
     g.mongo = mongo
 
-
-# @app.before_request
-# def init_mongo():
-#     g.mongo = MongoClient(ConfigService.get_mongo_host(), 27017).rabans
-
-# @app.route('/test')
-
-
 def initPinCode():
     pincode =  UtilService.pinCodeParser(PinCodePath)
 
@@ -54,18 +44,32 @@ def login():
 def getQuestions():
     return jsonify(MobileService.getQuestions())
 
-@app.route('/mobile/questions', methods = ['POST'])
-def postQuestions():
-    pass
+@app.route('/mobile/answers', methods = ['POST'])
+def postAnswers():
+    return jsonify(MobileService.addAnswers(g.json_body))
 
-def dump(obj):
-  for attr in dir(obj):
-    print("obj.%s = %r" % (attr, getattr(obj, attr)))
+@app.route('/stats/trending/disease/<pincode>')
+def getTrendingDisease():
+    return jsonify(StatsService.getTrendingDisease(pincode))
+
+@app.route('/alerts/<pincode>', methods = ['GET'])
+def getAlerts(pincode):
+    print pincode
+    # return jsonify(StatsService.getAlerts(pincode))
 
 @app.route('/')
 def hello():
     return 'Hello, World!'
 
+def toAscii(str):
+    return str.encode('ascii','ignore').strip('"')
+
+def documentToJson(document):
+    mp = {}
+    for key,value in document:
+        mp[ toAscii(key) ] = value
+    return mp
+
 if __name__ == "__main__":
     initPinCode()
-    app.run(debug=True)
+    app.run(debug=True,host='0.0.0.0')
