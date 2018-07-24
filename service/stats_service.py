@@ -1,6 +1,6 @@
 from flask import g
 from util.util_service import UtilService
-
+import random
 from collections import defaultdict
 
 class StatsService:
@@ -62,3 +62,29 @@ class StatsService:
     @staticmethod
     def getAlerts(pincode):
         pass
+
+    @staticmethod
+    def getNearByLatLong(x,y,delta=10):
+        x=float(x)
+        y=float(y)
+        nearby = []
+        for key,value in g.pincode.iteritems():
+            x0 = float(value[0])
+            y0 = float(value[1])
+            if (x-x0)*(x-x0) + (y-y0)*(y-y0) <= delta*delta:
+                nearby.append((x0,y0))
+        return nearby
+
+    @staticmethod
+    def getDiseaseRandom(disease,pincode="124001"):
+        results = []
+        x,y = g.pincode[pincode]
+        nearby = StatsService.getNearByLatLong(x,y)
+        for i in range(random.randint(0,100)):
+            result = []
+            x,y = UtilService.getRandom(nearby)
+            result.append(x)
+            result.append(y)
+            result.append(random.randint(10,300))
+            results.append(result)
+        return results

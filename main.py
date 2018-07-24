@@ -33,7 +33,7 @@ def unwind_json():
 @app.before_request
 def init_mongo():
     g.mongo = mongo
-    g.pincode = initPinCode()
+    g.pincode,g.pincodeAll = initPinCode()
 
 
 def initPinCode():
@@ -109,6 +109,18 @@ def getUsers(id):
 @cross_origin(origin='*')
 def getHeatMap(disease):
     return jsonify(StatsService.getDisease(disease.lower()))
+
+
+@app.route('/heatmap/random/<disease>', methods=['GET'])
+@cross_origin(origin='*')
+def getHeatMapRandom(disease):
+    return jsonify(StatsService.getDiseaseRandom(disease.lower()))
+
+
+def generateRandomPatientData():
+    disease = ["Thalassemia","Sickle cell Anemia","Diarrhea", "Nipah Virus"]
+
+
 
 
 if __name__ == "__main__":
