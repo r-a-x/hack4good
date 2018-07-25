@@ -27,10 +27,12 @@ class UtilService:
         return s
 
     @staticmethod
-    def parseList(str):
-        if ',' in str:
-            return UtilService.listHelper(str)
-        return str
+    def parseList(input):
+        if type(input) != type("rahul"):
+            return input
+        if ',' in input:
+            return UtilService.listHelper(input)
+        return input
 
     @staticmethod
     def trimStr(str):
@@ -76,35 +78,45 @@ class UtilService:
         return list[random.randint(0,len(list)-1)]
 
     @staticmethod
+    def generateUserHelper(firstName, lastName, sex, college, email, disease):
+        user = {"firstName": firstName, "lastName": lastName, "age": 23, "sex": sex, "pincode": 124001,
+                "college": college, "email": email, "password": firstName.lower(),
+                "disease": disease}
+        return user
+
+
+    @staticmethod
+    def generateUser(boys,girls,surnames,colleges,diseases):
+        firstName,sex=None,None
+        gender = random.randint(0,1)
+        if gender == 0:
+            firstName = UtilService.getRandom(boys)
+            sex = "male"
+        else:
+            firstName = UtilService.getRandom(girls)
+            sex = "female"
+        lastName = UtilService.getRandom(surnames)
+        email = UtilService.generateEmail(firstName, lastName)
+        college = UtilService.getRandom(colleges)
+        disease = UtilService.getRandom(diseases)
+        user = UtilService.generateUserHelper(firstName,lastName,sex,college,email,disease)
+        return user
+
+
+
+
+    @staticmethod
     # def generateData(count,latitudeLongitude,diseases,colleges,boys,girls,surnames):
-    def generateData(count):
+    def generateData(path,count):
         diseases = ["Thalassemia", "Sickle cell Anemia", "Diarrhea", "Nipah Virus", "Nipah Virus"]
         colleges = ["NIT-Allahabad","NIT-Bhopal","Bits Pilani","Vaish College","IP University","Lovely Professional"]
-        boys, girls = UtilService.parseNames("../resources/names.txt")
-        surnames = UtilService.parseSurNames("../resources/surnames.txt")
+        boys, girls = UtilService.parseNames(path + "names.txt")
+        surnames = UtilService.parseSurNames(path + "surnames.txt")
 
         users = []
-        diseases = []
         for i in range(count):
-            firstName = UtilService.getRandom(boys)
-            lastName = UtilService.getRandom(surnames)
-            email = UtilService.generateEmail(firstName, lastName)
-            user = {"firstName":firstName, "lastName": lastName, "age": 23, "sex": "male", "pincode": "124001",
-                    "college": UtilService.getRandom(colleges), "email": email, "password":firstName.lower() , "disease":UtilService.getRandom(diseases)}
-            users.append(user)
-            firstName = UtilService.getRandom(girls)
-            lastName = UtilService.getRandom(surnames)
-            email = UtilService.generateEmail(firstName, lastName)
-            user = {"firstName": firstName, "lastName": lastName, "age": 23, "sex": "female", "pincode": "124001",
-                    "college": UtilService.getRandom(colleges), "email": email, "password": firstName.lower(), "disease":UtilService.getRandom(diseases)}
-            users.append(user)
-            disease = []
-
-            x,y = UtilService.getRandom(g.pincodeAll["124001"])
-            disease.append(x)
-            disease.append(y)
-            disease.append(getRa)
-            diseases.append()
+            users.append(UtilService.generateUser(boys, girls, surnames, colleges, diseases))
+        g.mongo.user.insert(users)
         return users
 
 
@@ -128,6 +140,10 @@ class UtilService:
                 else:
                     girls.append(line.strip())
         return boys,girls
+
+    @staticmethod
+    def populateDatabase(path):
+        return UtilService.generateData(path,100)
 
 # if __name__ == "__main__":
 #     # print UtilService.parseNames("../resources/names.txt")

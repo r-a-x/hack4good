@@ -74,11 +74,11 @@ def getTrendingDisease():
     return jsonify(StatsService.getTrendingDisease(pincode))
 
 
-@app.route('/alerts/<pincode>', methods=['GET'])
+# @app.route('/alerts/<pincode>', methods=['GET'])
+@app.route('/alerts', methods=['GET'])
 @cross_origin(origin='*')
-def getAlerts(pincode):
-    print pincode
-    # return jsonify(StatsService.getAlerts(pincode))
+def getAlerts():
+    return jsonify(StatsService.getTrendingDisease())
 
 
 @app.route('/')
@@ -116,14 +116,10 @@ def getHeatMap(disease):
 def getHeatMapRandom(disease):
     return jsonify(StatsService.getDiseaseRandom(disease.lower()))
 
-
-def generateRandomPatientData():
-    disease = ["Thalassemia","Sickle cell Anemia","Diarrhea", "Nipah Virus"]
-
-
-
+# @app.route('/populate/database', methods = ['GET'])
+# def populateUsers():
+#     path = "./resources/"
+#     print UtilService.populateDatabase(path)
 
 if __name__ == "__main__":
-    print "Hello World !!!"
-    print "Hello World"
     app.run(debug=True, host='0.0.0.0')

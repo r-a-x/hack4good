@@ -9,10 +9,11 @@ class StatsService:
         pass
 
     @staticmethod
-    def getTrendingDisease(pincode):
-    #   Find all the users from the database and use it to search the result
-        pass
-
+    def getTrendingDisease(pincode=None):
+        return ["Your area has higher percentage of the case of Nipah Virus",
+                "Please Don't Panic",
+                "People in the infected areas must exercise caution and avoid consumption of fruits for a few days until the situation improves",
+                "If you feel any type of symptoms. Contact your doctor immediately"]
 
     @staticmethod
     def convertDictionaryToListsList(pinCode):
@@ -80,11 +81,11 @@ class StatsService:
         results = []
         x,y = g.pincode[pincode]
         nearby = StatsService.getNearByLatLong(x,y)
-        for i in range(random.randint(0,100)):
+        for i in range(random.randint(0,1000)):
             result = []
             x,y = UtilService.getRandom(nearby)
             result.append(x)
             result.append(y)
-            result.append(random.randint(10,300))
+            result.append(random.randint(10,1000))
             results.append(result)
         return results
